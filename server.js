@@ -33,6 +33,9 @@ app.get('/all', (req, res) => {
             res.json(rows)
         });
 
+       
+       
+       
         // Update an existing entry in a table
         //db.run("UPDATE students SET (age=?, gpa=?) WHERE name=?", [22, 3.4, "John"]);
 
@@ -43,6 +46,47 @@ app.get('/all', (req, res) => {
 
     // Close the connection
     db.close();
+})
+
+app.get('/artist/:artistName', (req, res) => {
+  const sqlite3 = require('sqlite3').verbose();
+  const db = new sqlite3.Database('./topsongs.db');
+
+  const artistName = req.params.artistName;
+
+  db.serialize(() => {
+      // Create a table
+      ///db.run("CREATE TABLE IF NOT EXISTS students (name TEXT, age INTEGER, gpa REAL)");
+
+      // Add a new entry to a table
+      ///db.run("INSERT INTO students VALUES (?, ?, ?)", ["John", 21, 3.33]);
+
+      // Get existing entries from a table individually
+      // db.each("SELECT * FROM PopularSongs", (err, row) => {
+      //  console.log(`${row.name} (${row.age}): ${row.gpa} GPA`);
+      // });
+
+      ///// Get existing entries from a table as an array
+
+
+      db.all("SELECT * FROM PopularSongs WHERE \"artist(s)_name\" = ?", artistName, (err, rows) => {
+          console.log(rows);
+          res.json(rows);
+      });
+
+     
+     
+     
+      // Update an existing entry in a table
+      //db.run("UPDATE students SET (age=?, gpa=?) WHERE name=?", [22, 3.4, "John"]);
+
+      // Delete an existing entry in a table
+      //db.run("DELETE FROM students WHERE name=?", "John");
+  });
+
+
+  // Close the connection
+  db.close();
 })
 
 app.listen(port, () => {
